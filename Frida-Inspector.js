@@ -21,6 +21,20 @@ Java.perform(function(){
 	console.log("test finished")
 });
 
+var CACHE_LOG ="";
+
+function log(type, message) {
+    if(message.toString() == CACHE_LOG.toString()) return; // Let's hide duplicate logs...
+
+    CACHE_LOG = message;
+    if(PYMODE) {
+        send({'type':type, 'message': message});
+    } else {
+        console.log('[' + type + '] ' + message);
+    }
+}
+
+
 var binder_driver_command_protocol = {
 	"BC_TRANSACTION" : 0,
 	"BC_REPLY" : 1,
@@ -85,5 +99,21 @@ function parse_binder_transaction_data(binder_transaction_data){
 
 
 function handle_write(write_buffer, write_size, write_consumed){
+	var cmd = write_buffer.readU32() & 0xff;
+	var ptr = write_buffer.add(write_consumed + 4);
+	var end = write_buffer.add(write_size);
 
+	switch(cmd) {
+		case binder_driver_command_protocol.BC_TRANSACTION:
+		case binder_driver_command_protocol.BC_REPLY:
+			var binder_transaction_data = parse_binder_transaction_data(ptr);
+			
+			log("INFO", "\n" + hexdump(binder_transaction_data.data.ptr.buffer, {
+                		length: binder_transaction_data.data_size,
+                		ansi: true,}) + "\n"
+			);
+			break;
+		default:
+			log('ERR', 'NOOP Handler')
+	}
 }
