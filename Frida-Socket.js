@@ -1,25 +1,18 @@
 Java.perform(function(){
 	console.log("test start")
 	var socket = Module.findExportByName("libc.so", "socket");
-	console.log(socket)
-	/**
-	Interceptor.attach(ioctl, {
+	
+	Interceptor.attach(socket, {
 		onEnter: function(args) {
-			var fd = args[0]; //int
-			var cmd = args[1]; //int
-			
-			//binder_ioctl = 0xc0306201
-			if(cmd != 0xc0306201) return;
-			var data = args[2];
+			var domain = args[0]; //int
+			var type = args[1]; //int
+			var protocol = args[2];
 
-			var binder_write_read = parse_struct_binder_write_read(data);
-
-			if(binder_write_read.write_size > 0){
-				handle_write(binder_write_read.write_buffer, binder_write_read.write_size, binder_write_read.write_consumed);
-			}
+			log("domain", domain)
+			log("type", type)
+			log("protocol", protocol)
 		}
 	})
-	**/
 	console.log("test finished")
 });
 
