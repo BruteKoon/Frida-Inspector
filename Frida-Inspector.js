@@ -57,7 +57,29 @@ function parse_struct_binder_write_read(binder_write_read){
 }
 
 function parse_binder_transaction_data(binder_transaction_data){
+	return{
+		"target": {
+			"handle": binder_transaction_data.readU32(),
+			"ptr": binder_transaction_data.readPointer()
+		},
+		"cookie": binder_transaction_data.add(8).readPointer(),
+		"code": binder_transaction_data.add(16).readU32(),
+		"flags": binder_transaction_data.add(20).readU32(),
+		"sender_pid": binder_transaction_data.add(24).readU32(),
+		"sender_euid": binder_transaction_data.add(28).readU32(),
+		"data_size": binder_transaction_data.add(32).readU32(),
+		"offsets_size": binder_transaction_data.add(40).readU64(),
+		"data": {
+			"ptr": {
+				"buffer": binder_transaction_data.add(48).readPointer(),
+				"offsets": binder_transaction_data.add(56),readPointer()
 
+			},
+			"buf": binder_transaction_data.add(48).readByteArray(8)
+
+		}
+
+	}
 
 }
 
