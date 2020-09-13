@@ -20,7 +20,7 @@ Java.perform(function(){
 	})
 	console.log("test finished")
 });
-var PYMODE = false;
+
 var CACHE_LOG ="";
 
 function log(type, message) {
@@ -87,10 +87,7 @@ function parse_binder_transaction_data(binder_transaction_data){
 			"ptr": {
 				"buffer": binder_transaction_data.add(48).readPointer(),
 				"offsets": binder_transaction_data.add(56).readPointer()
-<<<<<<< HEAD
-=======
 
->>>>>>> ad7ab7cd197dbf2bb6bc699a968e52f28a117849
 			},
 			"buf": binder_transaction_data.add(48).readByteArray(8)
 
