@@ -21,6 +21,7 @@ Java.perform(function(){
 	console.log("test finished")
 });
 
+const PYMODE = false;
 var CACHE_LOG ="";
 
 function log(type, message) {

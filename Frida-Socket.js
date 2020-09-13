@@ -1,7 +1,8 @@
 Java.perform(function(){
 	console.log("test start")
-	var socket = Module.findExportByName("libc.so", "socket");
-	
+	// var socket = Module.findExportByName("libc.so", "socket");
+	var recv = Module.findExportByName("libc.so", "recv");
+	/**
 	Interceptor.attach(socket, {
 		onEnter: function(args) {
 			var domain = args[0]; //int
@@ -13,9 +14,26 @@ Java.perform(function(){
 			log("protocol", protocol)
 		}
 	})
+	**/
+
+        Interceptor.attach(recv, {
+                onEnter: function(args) {
+                        var fd = args[0]; //int
+                        var buf = args[1]; //int
+                        var len = args[2];
+			var flags = args[3]; 
+
+                        log("fd", fd)
+                        log("buf", buf)
+                        log("len", len)
+			log("flags", flags)
+                }
+        })
+
 	console.log("test finished")
 });
 
+const PYMODE = false;
 var CACHE_LOG ="";
 
 function log(type, message) {
