@@ -1,24 +1,13 @@
 Java.perform(function(){
 	console.log("test start")
 
-	var socket = Module.findExportByName("libc.so", "socket");
 	var recv = Module.findExportByName("libc.so", "recv");
+
 	var send = Module.findExportByName("libc.so", "send");
 	var sendto = Module.findExportByName("libc.so", "sendto");
 	var sendmsg = Module.findExportByName("libc.so", "sendmsg");
+	var sendmmsg = Module.findExportByName("libc.so", "sendmmsg");
 
-	
-	Interceptor.attach(socket, {
-		onEnter: function(args) {
-			var domain = args[0]; //int
-			var type = args[1]; //int
-			var protocol = args[2];
-
-			log("domain", domain)
-			log("type", type)
-			log("protocol", protocol)
-		}
-	})
 	
 
         Interceptor.attach(recv, {
@@ -49,6 +38,26 @@ Java.perform(function(){
                         log("flags", flags)
                 }
         })
+
+        Interceptor.attach(sendto, {
+                onEnter: function(args) {
+                        var fd = args[0]; //int
+                        var buf = args[1]; //int
+                        var len = args[2];
+                        var flags = args[3];
+			var test1 = args[4];
+			var test2 = args[5];
+
+                        console.log("*************************** sendto hook **************************")
+                        log("fd", fd)
+                        log("buf", buf)
+                        log("len", len)
+                        log("flags", flags)
+			log("test1", test1)
+			log("test2", test2)
+                }
+        })
+
 
 	console.log("test finished")
 });
