@@ -1,8 +1,13 @@
 Java.perform(function(){
 	console.log("test start")
-	// var socket = Module.findExportByName("libc.so", "socket");
+
+	var socket = Module.findExportByName("libc.so", "socket");
 	var recv = Module.findExportByName("libc.so", "recv");
-	/**
+	var send = Module.findExportByName("libc.so", "send");
+	var sendto = Module.findExportByName("libc.so", "sendto");
+	var sendmsg = Module.findExportByName("libc.so", "sendmsg");
+
+	
 	Interceptor.attach(socket, {
 		onEnter: function(args) {
 			var domain = args[0]; //int
@@ -14,7 +19,7 @@ Java.perform(function(){
 			log("protocol", protocol)
 		}
 	})
-	**/
+	
 
         Interceptor.attach(recv, {
                 onEnter: function(args) {
@@ -27,6 +32,21 @@ Java.perform(function(){
                         log("buf", buf)
                         log("len", len)
 			log("flags", flags)
+                }
+        })
+
+	Interceptor.attach(send, {
+                onEnter: function(args) {
+                        var fd = args[0]; //int
+                        var buf = args[1]; //int
+                        var len = args[2];
+                        var flags = args[3];
+
+			console.log("*************************** send hook **************************")
+                        log("fd", fd)
+                        log("buf", buf)
+                        log("len", len)
+                        log("flags", flags)
                 }
         })
 
