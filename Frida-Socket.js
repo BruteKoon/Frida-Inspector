@@ -1,9 +1,11 @@
 Java.perform(function(){
 	console.log("test start")
 
+	// 후킹 리스트
 	var recv = Module.findExportByName("libc.so", "recv");
 
-	var send = Module.findExportByName("libc.so", "send");
+	// send 호출시 => sendto로 넘어가는 것 확인(send 후킹할 필요 없음)
+	//var send = Module.findExportByName("libc.so", "send");
 	var sendto = Module.findExportByName("libc.so", "sendto");
 	var sendmsg = Module.findExportByName("libc.so", "sendmsg");
 	var sendmmsg = Module.findExportByName("libc.so", "sendmmsg");
@@ -24,6 +26,7 @@ Java.perform(function(){
                 }
         })
 
+	/**
 	Interceptor.attach(send, {
                 onEnter: function(args) {
                         var fd = args[0]; //int
@@ -38,6 +41,7 @@ Java.perform(function(){
                         log("flags", flags)
                 }
         })
+	**/
 
         Interceptor.attach(sendto, {
                 onEnter: function(args) {
@@ -53,8 +57,8 @@ Java.perform(function(){
                         log("buf", buf)
                         log("len", len)
                         log("flags", flags)
-			log("test1", test1)
-			log("test2", test2)
+			//log("test1", test1) ==> 0
+			//log("test2", test2) ==> 0
                 }
         })
 
