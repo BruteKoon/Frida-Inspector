@@ -43,6 +43,7 @@ Java.perform(function(){
         })
 	**/
 
+	/**
         Interceptor.attach(sendto, {
                 onEnter: function(args) {
                         var fd = args[0]; //int
@@ -61,7 +62,20 @@ Java.perform(function(){
 			//log("test2", test2) ==> 0
                 }
         })
+**/
+        Interceptor.attach(sendmsg, {
+                onEnter: function(args) {
+                        var socket = args[0]; //int
+                        var msg = args[1]; //int
+                        var flags = args[2];
 
+                        console.log("*************************** sendmsg hook **************************")
+                        log("socket", socket)
+			log("socket 1", Socket.type(socket.toInt32()))
+                        log("msg", msg)
+                        log("flags", flags)
+                }
+        })
 
 	console.log("test finished")
 });
