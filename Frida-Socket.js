@@ -70,9 +70,15 @@ Java.perform(function(){
                         var flags = args[2];
 
                         console.log("*************************** sendmsg hook **************************")
+			var addr = Socket.peerAddress(socket.toInt32())
                         log("socket", socket)
-			log("socket 1", Socket.type(socket.toInt32()))
+			log("socket type", Socket.type(socket.toInt32()))
                         log("msg", msg)
+			log("INFO", "\n" + hexdump(msg, {
+                                length: 400,
+                                ansi: true,}) + "\n"
+                        );
+
                         log("flags", flags)
                 }
         })
