@@ -1,3 +1,4 @@
+
 Java.perform(function(){
 	console.log("test start")
 
@@ -123,3 +124,8 @@ function log(type, message) {
 }
 
 
+
+function parse_struct_msghdr(){
+
+
+}
