@@ -8,6 +8,8 @@ Java.perform(function(){
 	//var send = Module.findExportByName("libc.so", "send");
 	var sendto = Module.findExportByName("libc.so", "sendto");
 	var sendmsg = Module.findExportByName("libc.so", "sendmsg");
+
+	//send mmsg는 거의 호출될일 없음
 	var sendmmsg = Module.findExportByName("libc.so", "sendmmsg");
 
 	
@@ -63,6 +65,7 @@ Java.perform(function(){
                 }
         })
 **/
+	
         Interceptor.attach(sendmsg, {
                 onEnter: function(args) {
                         var socket = args[0]; //int
@@ -82,6 +85,25 @@ Java.perform(function(){
                         log("flags", flags)
                 }
         })
+	
+
+	/**
+        Interceptor.attach(sendmmsg, {
+                onEnter: function(args) {
+                        var socket = args[0]; //int
+                        var msg = args[1]; //int
+			var vlen = args[2]
+                        var flags = args[3];
+
+                        console.log("*************************** sendmsg hook **************************")
+                        var addr = Socket.peerAddress(socket.toInt32())
+                        log("socket", socket)
+                        log("socket type", Socket.type(socket.toInt32()))
+                        log("msg", msg)
+                        log("flags", flags)
+                }
+        })
+	**/
 
 	console.log("test finished")
 });
