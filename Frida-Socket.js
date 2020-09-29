@@ -78,10 +78,7 @@ Java.perform(function(){
                         log("socket", socket)
 			log("socket type", Socket.type(socket.toInt32()))
                         log("msg", msg)
-			log("INFO", "\n" + hexdump(msg, {
-                                length: 400,
-                                ansi: true,}) + "\n"
-                        );
+			log("msg name", msg.readU64())
 
                         log("flags", flags)
                 }
@@ -125,7 +122,20 @@ function log(type, message) {
 
 
 
-function parse_struct_msghdr(){
+function parse_struct_msghdr(msghdr){
+
+        var offset = 8; //64bit 기준
+
+	/**
+        return {
+                "write_size": binder_write_read.readU64(),
+                "write_consumed": binder_write_read.add(offset).readU64(),
+                "write_buffer": binder_write_read.add(offset*2).readPointer(),
+                "read_size": binder_write_read.add(offset*3).readU64(),
+                "read_consumed": binder_write_read.add(offset*4).readU64(),
+                "read_buffer": binder_write_read.add(offset*5).readPointer()
+        }
+	**/
 
 
 }
