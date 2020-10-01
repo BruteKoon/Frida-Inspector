@@ -2,7 +2,7 @@
 Java.perform(function(){
 	console.log("test start")
 
-	// 후킹 리스트
+	// Native =====================================================================================
 	var recv = Module.findExportByName("libc.so", "recv");
 
 	var recvfrom = Module.findExportByName("libc.so", "recvfrom");
@@ -17,6 +17,35 @@ Java.perform(function(){
 	//send mmsg는 거의 호출될일 없음
 	var sendmmsg = Module.findExportByName("libc.so", "sendmmsg");
 
+
+
+	// Java =========================================================================================
+	var Java_LocalSock = Java.use('android.net.LocalSocket');
+
+
+
+/************************* JAva LEvel **********************************************/
+
+Java_LocalSock.$init.overload().implementation = function(){
+  console.log("Local SOcket hook")
+ };
+
+Java_LocalSock.getInputStream.overload().implementation = function(){
+  console.log("Local SOCKET GETINPUT")
+};
+
+Java_LocalSock.getOutputStream.overload().implementation = function(){
+  console.log("Local Socket GEt OUtput")
+};
+
+
+
+
+
+
+
+
+/*****************************Native Level  ****************************************/
 	
 /**
         Interceptor.attach(recv, {
