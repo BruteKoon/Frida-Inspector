@@ -5,6 +5,10 @@ Java.perform(function(){
 	// 후킹 리스트
 	var recv = Module.findExportByName("libc.so", "recv");
 
+	var recvfrom = Module.findExportByName("libc.so", "recvfrom");
+	var recvmsg = Module.findExportByName("libc.so", "recvmsg");
+	var recvmmsg = Module.findExportByName("libc.so", "recvmmsg");
+
 	// send 호출시 => sendto로 넘어가는 것 확인(send 후킹할 필요 없음)
 	//var send = Module.findExportByName("libc.so", "send");
 	var sendto = Module.findExportByName("libc.so", "sendto");
@@ -14,7 +18,7 @@ Java.perform(function(){
 	var sendmmsg = Module.findExportByName("libc.so", "sendmmsg");
 
 	
-
+/**
         Interceptor.attach(recv, {
                 onEnter: function(args) {
                         var fd = args[0]; //int
@@ -26,6 +30,48 @@ Java.perform(function(){
                         log("buf", buf)
                         log("len", len)
 			log("flags", flags)
+                }
+        })
+**/
+        Interceptor.attach(recvfrom, {
+                onEnter: function(args) {
+                        var fd = args[0]; //int
+                        var buf = args[1]; //int
+                        var len = args[2];
+                        var flags = args[3];
+
+                        log("fd", fd)
+                        log("buf", buf)
+                        log("len", len)
+                        log("flags", flags)
+                }
+        })
+
+        Interceptor.attach(recvmsb, {
+                onEnter: function(args) {
+                        var fd = args[0]; //int
+                        var buf = args[1]; //int
+                        var len = args[2];
+                        var flags = args[3];
+
+                        log("fd", fd)
+                        log("buf", buf)
+                        log("len", len)
+                        log("flags", flags)
+                }
+        })
+
+        Interceptor.attach(recvmmsg, {
+                onEnter: function(args) {
+                        var fd = args[0]; //int
+                        var buf = args[1]; //int
+                        var len = args[2];
+                        var flags = args[3];
+
+                        log("fd", fd)
+                        log("buf", buf)
+                        log("len", len)
+                        log("flags", flags)
                 }
         })
 
