@@ -46,7 +46,7 @@ Java.perform(function(){
         })
 	**/
 
-	/**
+
         Interceptor.attach(sendto, {
                 onEnter: function(args) {
                         var fd = args[0]; //int
@@ -65,8 +65,8 @@ Java.perform(function(){
 			//log("test2", test2) ==> 0
                 }
         })
-**/
-	
+
+/**	
         Interceptor.attach(sendmsg, {
                 onEnter: function(args) {
                         var socket = args[0]; //int
@@ -77,14 +77,25 @@ Java.perform(function(){
 			var addr = Socket.peerAddress(socket.toInt32())
                         log("socket", socket)
 			log("socket type", Socket.type(socket.toInt32()))
-                        log("msg", msg)
-			log("msg name", msg.readU64())
+                        log("msg", msg) // msghdr struct
+			log("msg name", msg.readPointer())
+			log("msg len", msg.add(8).readU64())
+			log("ioven base", msg.add(8*2).readPointer())
+			log("ioven base addr", msg.add(8*2).readPointer().readU64())
+
+			log("INFO", "\n" + hexdump(msg.add(8*2).readPointer().readPointer(), {
+                		length: 2048,
+                		ansi: true,
+            		}) + "\n");
+			log("iovenc len", msg.add(8*3).readU64())
+			log("msg controll", msg.add(8*4).readPointer())
+			log("msg len", msg.add(8*5).readU64())
 
                         log("flags", flags)
                 }
         })
 	
-
+**/
 	/**
         Interceptor.attach(sendmmsg, {
                 onEnter: function(args) {
