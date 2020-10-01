@@ -46,7 +46,7 @@ Java.perform(function(){
         })
 	**/
 
-
+/**
         Interceptor.attach(sendto, {
                 onEnter: function(args) {
                         var fd = args[0]; //int
@@ -66,7 +66,7 @@ Java.perform(function(){
 			//log("test2", test2) ==> 0
                 }
         })
-
+**/
 /**	
         Interceptor.attach(sendmsg, {
                 onEnter: function(args) {
