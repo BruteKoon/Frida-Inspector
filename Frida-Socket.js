@@ -53,15 +53,16 @@ Java.perform(function(){
                         var buf = args[1]; //int
                         var len = args[2];
                         var flags = args[3];
-			var test1 = args[4];
-			var test2 = args[5];
+			var destaddr = args[4];
+			var destaddr_len = args[5];
 
                         console.log("*************************** sendto hook **************************")
                         log("fd", fd)
                         log("buf", buf)
+			dump(buf.readPointer(),512) // access violation error ==> Specific rom ERror / That's too bad
                         log("len", len)
                         log("flags", flags)
-			//log("test1", test1) ==> 0
+			log("destaddr", destaddr)
 			//log("test2", test2) ==> 0
                 }
         })
@@ -131,6 +132,14 @@ function log(type, message) {
     }
 }
 
+
+function dump(addr, size){
+                        log("DUMP", "\n" + hexdump(addr, {
+                                length: size,
+                                ansi: true,
+                        }) + "\n");
+
+}
 
 
 function parse_struct_msghdr(msghdr){
