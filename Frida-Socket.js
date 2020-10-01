@@ -33,47 +33,72 @@ Java.perform(function(){
                 }
         })
 **/
+	/**
         Interceptor.attach(recvfrom, {
                 onEnter: function(args) {
                         var fd = args[0]; //int
                         var buf = args[1]; //int
                         var len = args[2];
                         var flags = args[3];
-
+			console.log("****************recv from************")
                         log("fd", fd)
                         log("buf", buf)
                         log("len", len)
                         log("flags", flags)
                 }
         })
+	**/
 
-        Interceptor.attach(recvmsb, {
+/**
+        Interceptor.attach(recvmsg, {
                 onEnter: function(args) {
-                        var fd = args[0]; //int
-                        var buf = args[1]; //int
-                        var len = args[2];
-                        var flags = args[3];
+                        var socket = args[0]; //int
+                        var msg = args[1]; //int
+                        var flags = args[2];
 
-                        log("fd", fd)
-                        log("buf", buf)
-                        log("len", len)
+                        console.log("*************************** recv msg hook **************************")
+                        var addr = Socket.peerAddress(socket.toInt32())
+                        log("socket", socket)
+                        log("socket type", Socket.type(socket.toInt32()))
+                        log("msg", msg) // msghdr struct
+                        log("msg name", msg.readPointer())
+                        log("msg len", msg.add(8).readU64())
+                        log("ioven base", msg.add(8*2).readPointer())
+                        log("ioven base addr", msg.add(8*2).readPointer().readU64())
+
+                        log("INFO", "\n" + hexdump(msg.add(8*2).readPointer().readPointer(), {
+                                length: 2048,
+                                ansi: true,
+                        }) + "\n");
+                        log("iovenc len", msg.add(8*3).readU64())
+                        log("msg controll", msg.add(8*4).readPointer())
+                        log("msg len", msg.add(8*5).readU64())
+
                         log("flags", flags)
                 }
         })
+        
+**/
 
+/**
         Interceptor.attach(recvmmsg, {
                 onEnter: function(args) {
-                        var fd = args[0]; //int
-                        var buf = args[1]; //int
-                        var len = args[2];
+                        var socket = args[0]; //int
+                        var msg = args[1]; //int
+                        var vlen = args[2]
                         var flags = args[3];
 
-                        log("fd", fd)
-                        log("buf", buf)
-                        log("len", len)
+                        console.log("*************************** recvmmsg hook **************************")
+                        var addr = Socket.peerAddress(socket.toInt32())
+                        log("socket", socket)
+                        log("socket type", Socket.type(socket.toInt32()))
+                        log("msg", msg)
                         log("flags", flags)
                 }
         })
+
+**/
+
 
 	/**
 	Interceptor.attach(send, {
@@ -151,7 +176,7 @@ Java.perform(function(){
 			var vlen = args[2]
                         var flags = args[3];
 
-                        console.log("*************************** sendmsg hook **************************")
+                        console.log("*************************** sendmmsg hook **************************")
                         var addr = Socket.peerAddress(socket.toInt32())
                         log("socket", socket)
                         log("socket type", Socket.type(socket.toInt32()))
