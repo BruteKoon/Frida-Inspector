@@ -13,8 +13,14 @@ Java.perform(function(){
 
 			var binder_write_read = parse_struct_binder_write_read(data);
 
+			/**
 			if(binder_write_read.write_size > 0){
 				handle_write(binder_write_read.write_buffer, binder_write_read.write_size, binder_write_read.write_consumed);
+			}
+			**/
+
+			if(binder_write_read.read_size > 0){
+				handle_read(binder_write_read.read_buffer, binder_write_read.read_size, binder_write_read.read_consumed);
 			}
 		}
 	})
@@ -118,3 +124,25 @@ function handle_write(write_buffer, write_size, write_consumed){
 			log('ERR', 'NOOP Handler')
 	}
 }
+
+
+function handle_read(read_buffer, read_size, read_consumed){
+        var cmd = read_buffer.readU32() & 0xff;
+        var ptr = read_buffer.add(read_consumed + 4);
+        var end = read_buffer.add(read_size);
+
+        switch(cmd) {
+                case binder_driver_command_protocol.BC_TRANSACTION:
+                case binder_driver_command_protocol.BC_REPLY:
+                        var binder_transaction_data = parse_binder_transaction_data(ptr);
+
+                        log("INFO", "\n" + hexdump(binder_transaction_data.data.ptr.buffer, {
+                                length: binder_transaction_data.data_size,
+                                ansi: true,}) + "\n"
+                        );
+                        break;
+                default:
+                        log('ERR', 'NOOP Handler')
+        }
+}
+
