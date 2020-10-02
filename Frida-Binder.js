@@ -132,8 +132,8 @@ function handle_read(read_buffer, read_size, read_consumed){
         var end = read_buffer.add(read_size);
 
         switch(cmd) {
-                case binder_driver_command_protocol.BC_TRANSACTION:
-                case binder_driver_command_protocol.BC_REPLY:
+                case binder_driver_command_protocol.BR_TRANSACTION:
+                case binder_driver_command_protocol.BR_REPLY:
                         var binder_transaction_data = parse_binder_transaction_data(ptr);
 
                         log("INFO", "\n" + hexdump(binder_transaction_data.data.ptr.buffer, {
