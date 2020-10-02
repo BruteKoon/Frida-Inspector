@@ -62,6 +62,11 @@ var binder_driver_command_protocol = {
 	"BC_DEAD_BINDER_DONE": 16,
 };
 
+var binder_driver_return_protocol ={
+
+
+}
+
 
 function parse_struct_binder_write_read(binder_write_read){
 	var offset = 8; //64bit 기준
