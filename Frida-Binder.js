@@ -1,7 +1,21 @@
 Java.perform(function(){
 	console.log("test start")
+
+	var binder_class = Java.use("android.os.Binder")
+
+
+
 	var ioctl = Module.findExportByName("libbinder.so", "ioctl");
-	
+
+
+	binder_class.transact.overload('int','android.os.Parcel','android.os.Parcel','int').implementation = function(code, data, reply, flag){
+		console.log("binder_class hooking")
+		console.log(data)
+		console.log(reply)
+
+	}
+
+	/**
 	Interceptor.attach(ioctl, {
 		onEnter: function(args) {
 			var fd = args[0]; //int
@@ -13,17 +27,18 @@ Java.perform(function(){
 
 			var binder_write_read = parse_struct_binder_write_read(data);
 
-			/**
+			
 			if(binder_write_read.write_size > 0){
 				handle_write(binder_write_read.write_buffer, binder_write_read.write_size, binder_write_read.write_consumed);
 			}
-			**/
+			
 
 			if(binder_write_read.read_size > 0){
 				handle_read(binder_write_read.read_buffer, binder_write_read.read_size, binder_write_read.read_consumed);
 			}
 		}
 	})
+**/
 	console.log("test finished")
 });
 
