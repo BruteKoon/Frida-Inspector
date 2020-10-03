@@ -63,9 +63,25 @@ var binder_driver_command_protocol = {
 };
 
 var binder_driver_return_protocol ={
-
-
-}
+	"BR_ERROR" : 0,
+	"BR_OK" : 1,
+	"BR_TRANSACTION": 2,
+	"BR_REPLY" : 3,
+	"BR_ACQUIRE_RESULT" : 4,
+	"BR_DEAD_REPLY" : 5,
+	"BR_TRANSACTION_COMPLETE" : 6,
+	"BR_INCREFS" : 7,
+	"BR_ACQUIRE" : 8,
+	"BR_RELEASE" : 9,
+	"BR_DECREFS" : 10,
+	"BR_ATTEMPT_ACQUIRE" :11,
+	"BR_NOOP" : 12,
+	"BR_SPAWN_LOOPER" : 13,
+	"BR_FINISHED" : 14,
+	"BR_DEAD_BINDER" : 15,
+	"BR_CLEAR_DEATH_NOTIFICATION_DONE" : 16,
+	"BR_FAILED_REPLY" : 17,
+};
 
 
 function parse_struct_binder_write_read(binder_write_read){
