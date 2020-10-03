@@ -142,7 +142,7 @@ function handle_write(write_buffer, write_size, write_consumed){
 			);
 			break;
 		default:
-			log('ERR', 'NOOP Handler')
+			log('ERR', 'Defualt Handler')
 	}
 }
 
@@ -151,10 +151,10 @@ function handle_read(read_buffer, read_size, read_consumed){
         var cmd = read_buffer.readU32() & 0xff;
         var ptr = read_buffer.add(read_consumed + 4);
         var end = read_buffer.add(read_size);
-
+	
         switch(cmd) {
-                case binder_driver_command_protocol.BR_TRANSACTION:
-                case binder_driver_command_protocol.BR_REPLY:
+                case binder_driver_return_protocol.BR_TRANSACTION:
+                case binder_driver_return_protocol.BR_REPLY:
                         var binder_transaction_data = parse_binder_transaction_data(ptr);
 
                         log("INFO", "\n" + hexdump(binder_transaction_data.data.ptr.buffer, {
@@ -162,8 +162,11 @@ function handle_read(read_buffer, read_size, read_consumed){
                                 ansi: true,}) + "\n"
                         );
                         break;
+		case binder_driver_return_protocol.BR_NOOP:
+			log('INFO', 'NOOP')
+			break;
                 default:
-                        log('ERR', 'NOOP Handler')
+                        log('ERR', 'Default Handler')
         }
 }
 
