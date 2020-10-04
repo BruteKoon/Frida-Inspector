@@ -1,20 +1,46 @@
 Java.perform(function(){
 	console.log("test start")
 
-	var binder_class = Java.use("android.os.Binder")
-
-
+	var binder_proxy = Java.use("android.os.BinderProxy")
+	var binder_stub = Java.use("android.os.Binder")
 
 	var ioctl = Module.findExportByName("libbinder.so", "ioctl");
 
+	binder_proxy.transact.overload('int','android.os.Parcel','android.os.Parcel','int').implementation = function(code, data, reply, flag){
+		console.log("binder Proxy hooking")
+		
+		 // 20
+		 // android.os.Parcel@74a795e
+		 // android.os.Parcel@864813f
+		 // 1
+		 
 
-	binder_class.transact.overload('int','android.os.Parcel','android.os.Parcel','int').implementation = function(code, data, reply, flag){
-		console.log("binder_class hooking")
+		console.log(code)
 		console.log(data)
 		console.log(reply)
+		console.log(flag)
+		return this.transact(code,data,reply,flag)
 
 	}
+	
 
+	/**
+        binder_stub.onTransact.overload('int','android.os.Parcel','android.os.Parcel','int').implementation = function(code, data, reply, flag){
+                console.log("binder Stub  hooking")
+
+                 // 20
+                 // android.os.Parcel@74a795e
+                 // android.os.Parcel@864813f
+                 // 1
+                 
+                console.log(code)
+                console.log(data)
+                console.log(reply)
+                console.log(flag)
+                return this.Ontransact(code,data,reply,flag)
+
+        }
+	**/
 	/**
 	Interceptor.attach(ioctl, {
 		onEnter: function(args) {
